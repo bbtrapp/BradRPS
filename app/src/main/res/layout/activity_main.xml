@@ -28,7 +28,7 @@
             android:id="@+id/button"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.44"
-            android:onclick="playPressed"
+            android:onClick="playPressed"
             android:textSize="24dp" />
 
     </LinearLayout>

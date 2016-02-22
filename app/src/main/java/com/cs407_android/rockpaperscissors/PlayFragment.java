@@ -22,6 +22,8 @@ import android.widget.TextView;
  */
 public class PlayFragment extends Fragment {
 
+
+
     private static final String ARG_PLAYER_ONE = "player1";
     private static final String ARG_PLAYER_TWO = "player2";
 
@@ -105,10 +107,17 @@ public class PlayFragment extends Fragment {
             public void onClick(View v) {
 
                 if(player1Choice == null) {
+                    getFragmentManager()
+                            .beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.main_fragment_container, PlayFragment.newInstance(getString(R.string.rock), null))
+                            .commit();
                    //TODO player 1 chose Rock
                 }
                 else{
                     //TODO player 2 chose Rock
+                    player2Choice = getString(R.string.rock);
+                    gameLogic();
                 }
 
             }
@@ -119,12 +128,18 @@ public class PlayFragment extends Fragment {
             public void onClick(View v) {
 
                 if(player1Choice == null) {
+                    getFragmentManager()
+                            .beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.main_fragment_container, PlayFragment.newInstance(getString(R.string.paper), null))
+                            .commit();
                     //TODO
 
                 }
                 else{
                     //TODO
-
+                    player2Choice = getString(R.string.paper);
+                    gameLogic();
                 }
             }
         });
@@ -135,16 +150,39 @@ public class PlayFragment extends Fragment {
 
                 if(player1Choice == null) {
                     //TODO
-
+                    getFragmentManager()
+                            .beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.main_fragment_container, PlayFragment.newInstance(getString(R.string.scissors), null))
+                            .commit();
                 }
                 else{
                     //TODO
+                    player2Choice = getString(R.string.scissors);
+                    gameLogic();
 
                 }
             }
         });
     }
 
+    private void gameLogic(){
+        if(player1Choice.equals(player2Choice)){
+            displayWinner("Woah it's a Draw!");
+        }
+        else if(player1Choice.equals(getString(R.string.rock)) && player2Choice.equals(getString(R.string.paper))){
+            displayWinner(getString(R.string.player_2_header));
+        }
+        else if(player1Choice.equals(getString(R.string.paper)) && player2Choice.equals(getString(R.string.scissors))){
+            displayWinner(getString(R.string.player_2_header));
+        }
+        else if(player1Choice.equals(getString(R.string.scissors)) && player2Choice.equals(getString(R.string.rock))){
+            displayWinner(getString(R.string.player_2_header));
+        }
+        else{
+            displayWinner(getString(R.string.player_1_header));
+        }
+    }
 
     private void displayWinner(String winner){
 
@@ -159,12 +197,14 @@ public class PlayFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO start a rematch!
+                        getFragmentManager().popBackStack();
                     }
                 })
                 .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO back out the the start screen
+                        getActivity().finish();
                     }
                 })
                 .show();
